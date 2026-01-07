@@ -19,9 +19,9 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/leonard/w/projects/cpp/dashboard/libs/implot/implot.cpp" "CMakeFiles/TradingDashboard.dir/libs/implot/implot.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/libs/implot/implot.cpp.o.d"
   "/home/leonard/w/projects/cpp/dashboard/libs/implot/implot_demo.cpp" "CMakeFiles/TradingDashboard.dir/libs/implot/implot_demo.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/libs/implot/implot_demo.cpp.o.d"
   "/home/leonard/w/projects/cpp/dashboard/libs/implot/implot_items.cpp" "CMakeFiles/TradingDashboard.dir/libs/implot/implot_items.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/libs/implot/implot_items.cpp.o.d"
-  "/home/leonard/w/projects/cpp/dashboard/main.cpp" "CMakeFiles/TradingDashboard.dir/main.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/main.cpp.o.d"
-  "/home/leonard/w/projects/cpp/dashboard/src/DashboardUI.cpp" "CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o.d"
-  "/home/leonard/w/projects/cpp/dashboard/src/TradingEngine.cpp" "CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o.d"
+  "/home/leonard/w/projects/cpp/dashboard/src/core/TradingEngine.cpp" "CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o.d"
+  "/home/leonard/w/projects/cpp/dashboard/src/main.cpp" "CMakeFiles/TradingDashboard.dir/src/main.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/src/main.cpp.o.d"
+  "/home/leonard/w/projects/cpp/dashboard/src/ui/DashboardUI.cpp" "CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o" "gcc" "CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

@@ -50,13 +50,13 @@ set(GLAD_SOURCES
 )
 
 set(APP_SOURCES
-    src/TradingEngine.cpp
-    src/DashboardUI.cpp
+    src/core/TradingEngine.cpp
+    src/ui/DashboardUI.cpp
 )
 
 # 4. Executable
 add_executable(TradingDashboard
-    main.cpp
+    src/main.cpp
     ${IMGUI_SOURCES}
     ${IMPLOT_SOURCES}
     ${GLAD_SOURCES}

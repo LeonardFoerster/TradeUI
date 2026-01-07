@@ -69,19 +69,19 @@ include CMakeFiles/TradingDashboard.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/TradingDashboard.dir/flags.make
 
-CMakeFiles/TradingDashboard.dir/main.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
-CMakeFiles/TradingDashboard.dir/main.cpp.o: /home/leonard/w/projects/cpp/dashboard/main.cpp
-CMakeFiles/TradingDashboard.dir/main.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TradingDashboard.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/main.cpp.o -MF CMakeFiles/TradingDashboard.dir/main.cpp.o.d -o CMakeFiles/TradingDashboard.dir/main.cpp.o -c /home/leonard/w/projects/cpp/dashboard/main.cpp
+CMakeFiles/TradingDashboard.dir/src/main.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
+CMakeFiles/TradingDashboard.dir/src/main.cpp.o: /home/leonard/w/projects/cpp/dashboard/src/main.cpp
+CMakeFiles/TradingDashboard.dir/src/main.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TradingDashboard.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/src/main.cpp.o -MF CMakeFiles/TradingDashboard.dir/src/main.cpp.o.d -o CMakeFiles/TradingDashboard.dir/src/main.cpp.o -c /home/leonard/w/projects/cpp/dashboard/src/main.cpp
 
-CMakeFiles/TradingDashboard.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/main.cpp > CMakeFiles/TradingDashboard.dir/main.cpp.i
+CMakeFiles/TradingDashboard.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/src/main.cpp > CMakeFiles/TradingDashboard.dir/src/main.cpp.i
 
-CMakeFiles/TradingDashboard.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/main.cpp -o CMakeFiles/TradingDashboard.dir/main.cpp.s
+CMakeFiles/TradingDashboard.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/src/main.cpp -o CMakeFiles/TradingDashboard.dir/src/main.cpp.s
 
 CMakeFiles/TradingDashboard.dir/libs/imgui/imgui.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
 CMakeFiles/TradingDashboard.dir/libs/imgui/imgui.cpp.o: /home/leonard/w/projects/cpp/dashboard/libs/imgui/imgui.cpp
@@ -237,37 +237,37 @@ CMakeFiles/TradingDashboard.dir/libs/glad/src/glad.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/TradingDashboard.dir/libs/glad/src/glad.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/libs/glad/src/glad.c -o CMakeFiles/TradingDashboard.dir/libs/glad/src/glad.c.s
 
-CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
-CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o: /home/leonard/w/projects/cpp/dashboard/src/TradingEngine.cpp
-CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o -MF CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o.d -o CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o -c /home/leonard/w/projects/cpp/dashboard/src/TradingEngine.cpp
+CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
+CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o: /home/leonard/w/projects/cpp/dashboard/src/core/TradingEngine.cpp
+CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o -MF CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o.d -o CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o -c /home/leonard/w/projects/cpp/dashboard/src/core/TradingEngine.cpp
 
-CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/src/TradingEngine.cpp > CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.i
+CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/src/core/TradingEngine.cpp > CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.i
 
-CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/src/TradingEngine.cpp -o CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.s
+CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/src/core/TradingEngine.cpp -o CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.s
 
-CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
-CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o: /home/leonard/w/projects/cpp/dashboard/src/DashboardUI.cpp
-CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o -MF CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o.d -o CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o -c /home/leonard/w/projects/cpp/dashboard/src/DashboardUI.cpp
+CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o: CMakeFiles/TradingDashboard.dir/flags.make
+CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o: /home/leonard/w/projects/cpp/dashboard/src/ui/DashboardUI.cpp
+CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o: CMakeFiles/TradingDashboard.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o -MF CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o.d -o CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o -c /home/leonard/w/projects/cpp/dashboard/src/ui/DashboardUI.cpp
 
-CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/src/DashboardUI.cpp > CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.i
+CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/leonard/w/projects/cpp/dashboard/src/ui/DashboardUI.cpp > CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.i
 
-CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/src/DashboardUI.cpp -o CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.s
+CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/leonard/w/projects/cpp/dashboard/src/ui/DashboardUI.cpp -o CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.s
 
 # Object files for target TradingDashboard
 TradingDashboard_OBJECTS = \
-"CMakeFiles/TradingDashboard.dir/main.cpp.o" \
+"CMakeFiles/TradingDashboard.dir/src/main.cpp.o" \
 "CMakeFiles/TradingDashboard.dir/libs/imgui/imgui.cpp.o" \
 "CMakeFiles/TradingDashboard.dir/libs/imgui/imgui_demo.cpp.o" \
 "CMakeFiles/TradingDashboard.dir/libs/imgui/imgui_draw.cpp.o" \
@@ -279,13 +279,13 @@ TradingDashboard_OBJECTS = \
 "CMakeFiles/TradingDashboard.dir/libs/implot/implot_items.cpp.o" \
 "CMakeFiles/TradingDashboard.dir/libs/implot/implot_demo.cpp.o" \
 "CMakeFiles/TradingDashboard.dir/libs/glad/src/glad.c.o" \
-"CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o" \
-"CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o"
+"CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o" \
+"CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o"
 
 # External object files for target TradingDashboard
 TradingDashboard_EXTERNAL_OBJECTS =
 
-TradingDashboard: CMakeFiles/TradingDashboard.dir/main.cpp.o
+TradingDashboard: CMakeFiles/TradingDashboard.dir/src/main.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/imgui/imgui.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/imgui/imgui_demo.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/imgui/imgui_draw.cpp.o
@@ -297,8 +297,8 @@ TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/implot/implot.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/implot/implot_items.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/implot/implot_demo.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/libs/glad/src/glad.c.o
-TradingDashboard: CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o
-TradingDashboard: CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o
+TradingDashboard: CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o
+TradingDashboard: CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o
 TradingDashboard: CMakeFiles/TradingDashboard.dir/build.make
 TradingDashboard: /usr/lib/x86_64-linux-gnu/libglfw.so.3.3
 TradingDashboard: CMakeFiles/TradingDashboard.dir/link.txt

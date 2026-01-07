@@ -393,77 +393,77 @@ libs/implot/implot_items.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/libs/implot/implot_items.cpp.s
 .PHONY : libs/implot/implot_items.cpp.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+src/core/TradingEngine.o: src/core/TradingEngine.cpp.o
+.PHONY : src/core/TradingEngine.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/core/TradingEngine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.o
+.PHONY : src/core/TradingEngine.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/core/TradingEngine.i: src/core/TradingEngine.cpp.i
+.PHONY : src/core/TradingEngine.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/core/TradingEngine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.i
+.PHONY : src/core/TradingEngine.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/core/TradingEngine.s: src/core/TradingEngine.cpp.s
+.PHONY : src/core/TradingEngine.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/core/TradingEngine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/core/TradingEngine.cpp.s
+.PHONY : src/core/TradingEngine.cpp.s
 
-src/DashboardUI.o: src/DashboardUI.cpp.o
-.PHONY : src/DashboardUI.o
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
 
 # target to build an object file
-src/DashboardUI.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.o
-.PHONY : src/DashboardUI.cpp.o
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
 
-src/DashboardUI.i: src/DashboardUI.cpp.i
-.PHONY : src/DashboardUI.i
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-src/DashboardUI.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.i
-.PHONY : src/DashboardUI.cpp.i
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-src/DashboardUI.s: src/DashboardUI.cpp.s
-.PHONY : src/DashboardUI.s
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-src/DashboardUI.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/DashboardUI.cpp.s
-.PHONY : src/DashboardUI.cpp.s
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
-src/TradingEngine.o: src/TradingEngine.cpp.o
-.PHONY : src/TradingEngine.o
+src/ui/DashboardUI.o: src/ui/DashboardUI.cpp.o
+.PHONY : src/ui/DashboardUI.o
 
 # target to build an object file
-src/TradingEngine.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.o
-.PHONY : src/TradingEngine.cpp.o
+src/ui/DashboardUI.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.o
+.PHONY : src/ui/DashboardUI.cpp.o
 
-src/TradingEngine.i: src/TradingEngine.cpp.i
-.PHONY : src/TradingEngine.i
+src/ui/DashboardUI.i: src/ui/DashboardUI.cpp.i
+.PHONY : src/ui/DashboardUI.i
 
 # target to preprocess a source file
-src/TradingEngine.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.i
-.PHONY : src/TradingEngine.cpp.i
+src/ui/DashboardUI.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.i
+.PHONY : src/ui/DashboardUI.cpp.i
 
-src/TradingEngine.s: src/TradingEngine.cpp.s
-.PHONY : src/TradingEngine.s
+src/ui/DashboardUI.s: src/ui/DashboardUI.cpp.s
+.PHONY : src/ui/DashboardUI.s
 
 # target to generate assembly for a file
-src/TradingEngine.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/TradingEngine.cpp.s
-.PHONY : src/TradingEngine.cpp.s
+src/ui/DashboardUI.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TradingDashboard.dir/build.make CMakeFiles/TradingDashboard.dir/src/ui/DashboardUI.cpp.s
+.PHONY : src/ui/DashboardUI.cpp.s
 
 # Help Target
 help:
@@ -507,15 +507,15 @@ help:
 	@echo "... libs/implot/implot_items.o"
 	@echo "... libs/implot/implot_items.i"
 	@echo "... libs/implot/implot_items.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... src/DashboardUI.o"
-	@echo "... src/DashboardUI.i"
-	@echo "... src/DashboardUI.s"
-	@echo "... src/TradingEngine.o"
-	@echo "... src/TradingEngine.i"
-	@echo "... src/TradingEngine.s"
+	@echo "... src/core/TradingEngine.o"
+	@echo "... src/core/TradingEngine.i"
+	@echo "... src/core/TradingEngine.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/ui/DashboardUI.o"
+	@echo "... src/ui/DashboardUI.i"
+	@echo "... src/ui/DashboardUI.s"
 .PHONY : help
 
 
