@@ -185,14 +185,17 @@ void RenderChart(TradingEngine& engine) {
     // The Chart
     ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(10, 10));
     if (ImPlot::BeginPlot("##MainChart", ImVec2(-1, -1), ImPlotFlags_NoTitle)) {
-        int count = (int)state.candles.size();
+        // Get Aggregated Candles based on Timeframe
+        std::vector<Candle> display_candles = engine.GetCandles(state.timeframe_idx);
+        int count = (int)display_candles.size();
+        
         std::vector<double> times(count), opens(count), highs(count), lows(count), closes(count);
         for(int i=0; i<count; ++i) {
-            times[i] = state.candles[i].time;
-            opens[i] = state.candles[i].open;
-            highs[i] = state.candles[i].high;
-            lows[i] = state.candles[i].low;
-            closes[i] = state.candles[i].close;
+            times[i] = display_candles[i].time;
+            opens[i] = display_candles[i].open;
+            highs[i] = display_candles[i].high;
+            lows[i] = display_candles[i].low;
+            closes[i] = display_candles[i].close;
         }
 
         ImPlot::SetupAxis(ImAxis_X1, nullptr, ImPlotAxisFlags_NoLabel);
@@ -217,8 +220,34 @@ void RenderChart(TradingEngine& engine) {
                  ImPlot::SetupAxisLimits(ImAxis_Y1, min_y * 0.999, max_y * 1.001, ImGuiCond_FirstUseEver);
             }
         }
+        
+        // Dynamic Width based on Timeframe (approx 70% of the interval)
+        double intervals_sec[] = {60.0, 300.0, 900.0, 3600.0, 14400.0, 86400.0};
+        float width = (float)(intervals_sec[state.timeframe_idx] * 0.7);
 
-        DrawCandlesticks("BTC/USD", times.data(), opens.data(), closes.data(), lows.data(), highs.data(), count, 40.0f);
+        DrawCandlesticks("BTC/USD", times.data(), opens.data(), closes.data(), lows.data(), highs.data(), count, width);
+
+        // Draw User Trade Markers
+        std::vector<double> buy_x, buy_y, sell_x, sell_y;
+        for (const auto& o : state.order_history) {
+            if (o.time == 0.0) continue; // Skip if no time recorded
+            if (o.is_buy) {
+                buy_x.push_back(o.time);
+                buy_y.push_back(o.price);
+            } else {
+                sell_x.push_back(o.time);
+                sell_y.push_back(o.price);
+            }
+        }
+
+        if (!buy_x.empty()) {
+            ImPlot::SetNextMarkerStyle(ImPlotMarker_Up, 8.0f, ImVec4(0, 1, 0, 1), 1.0f, ImVec4(0, 0, 0, 1));
+            ImPlot::PlotScatter("Buys", buy_x.data(), buy_y.data(), (int)buy_x.size());
+        }
+        if (!sell_x.empty()) {
+            ImPlot::SetNextMarkerStyle(ImPlotMarker_Down, 8.0f, ImVec4(1, 0, 0, 1), 1.0f, ImVec4(0, 0, 0, 1));
+            ImPlot::PlotScatter("Sells", sell_x.data(), sell_y.data(), (int)sell_x.size());
+        }
         
         if (count > 0) {
             double cur_p = closes.back();
@@ -297,16 +326,27 @@ void RenderRecentTrades(TradingEngine& engine) {
 
 void RenderOrderEntry(TradingEngine& engine) {
     auto& state = engine.state;
+    
     ImGui::BeginTabBar("OrderType");
     if (ImGui::BeginTabItem("Limit")) { state.order_type = 0; ImGui::EndTabItem(); }
     if (ImGui::BeginTabItem("Market")) { state.order_type = 1; ImGui::EndTabItem(); }
+    if (ImGui::BeginTabItem("FOK")) { state.order_type = 2; ImGui::EndTabItem(); }
     ImGui::EndTabBar();
 
+    ImGui::Spacing();
+
+    // Mode Selector: Open vs Close
+    ImGui::BeginTabBar("ActionMode");
+    if (ImGui::BeginTabItem("  Open  ")) { state.is_reduce_mode = false; ImGui::EndTabItem(); }
+    if (ImGui::BeginTabItem("  Close ")) { state.is_reduce_mode = true;  ImGui::EndTabItem(); }
+    ImGui::EndTabBar();
+
+    ImGui::Spacing();
     ImGui::Text("Equity: %.2f USD", state.equity);
     ImGui::Text("Avail:  %.2f USD", state.balance);
     ImGui::Separator();
 
-    if (state.order_type == 0) { // Limit
+    if (state.order_type == 0 || state.order_type == 2) { // Limit or FOK
         ImGui::InputFloat("Price", &state.order_price, 10.0f, 100.0f, "%.2f");
     } else {
         ImGui::TextDisabled("Price: Market (%.2f)", state.current_price);
@@ -314,30 +354,89 @@ void RenderOrderEntry(TradingEngine& engine) {
     
     ImGui::InputFloat("Amount", &state.order_amount, 0.01f, 0.1f, "%.4f");
 
-    float estimated_price = (state.order_type == 0) ? state.order_price : state.current_price;
+    float estimated_price = (state.order_type == 1) ? state.current_price : state.order_price;
     float total = estimated_price * state.order_amount;
     
     ImGui::TextDisabled("Total: %.2f USD", total);
     ImGui::Separator();
     
     float w = ImGui::GetContentRegionAvail().x;
-    // Green Buy Button
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.7f, 0.3f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.8f, 0.4f, 1.0f));
-    if (ImGui::Button("Buy / Long", ImVec2(w * 0.5f - 4, 40))) { 
-        engine.PlaceOrder(true, state.order_type == 1, state.order_price, state.order_amount); 
-    }
-    ImGui::PopStyleColor(2);
+    float btn_w = (w * 0.5f) - 4;
 
-    ImGui::SameLine();
-    
-    // Red Sell Button
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
-    if (ImGui::Button("Sell / Short", ImVec2(w * 0.5f - 4, 40))) { 
-        engine.PlaceOrder(false, state.order_type == 1, state.order_price, state.order_amount);
+    if (!state.is_reduce_mode) {
+        // OPEN MODE
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.7f, 0.3f, 1.0f));
+        if (ImGui::Button("Open Long", ImVec2(btn_w, 40))) { 
+            engine.PlaceOrder(true, state.order_type, state.order_price, state.order_amount, false); 
+        }
+        ImGui::PopStyleColor();
+
+        ImGui::SameLine();
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+        if (ImGui::Button("Open Short", ImVec2(btn_w, 40))) { 
+            engine.PlaceOrder(false, state.order_type, state.order_price, state.order_amount, false); 
+        }
+        ImGui::PopStyleColor();
+    } else {
+        // CLOSE MODE
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+        if (ImGui::Button("Close Long", ImVec2(btn_w, 40))) { 
+            engine.PlaceOrder(false, state.order_type, state.order_price, state.order_amount, true);
+        }
+        ImGui::PopStyleColor();
+
+        ImGui::SameLine();
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.7f, 0.3f, 1.0f));
+        if (ImGui::Button("Close Short", ImVec2(btn_w, 40))) { 
+            engine.PlaceOrder(true, state.order_type, state.order_price, state.order_amount, true);
+        }
+        ImGui::PopStyleColor();
     }
-    ImGui::PopStyleColor(2);
+}
+
+void RenderEquityWindow(TradingEngine& engine) {
+    auto& state = engine.state;
+    
+    // 1. Statistics Panel
+    if (ImGui::BeginTable("StatsTable", 4, ImGuiTableFlags_Borders)) {
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn(); ImGui::Text("Max Drawdown");
+        ImGui::TableNextColumn(); ImGui::TextColored(ImVec4(1,0.3f,0.3f,1), "%.2f%%", state.max_drawdown);
+        
+        ImGui::TableNextColumn(); ImGui::Text("Win Rate");
+        double win_rate = (state.total_trades_count > 0) ? ((double)state.winning_trades / state.total_trades_count * 100.0) : 0.0;
+        ImGui::TableNextColumn(); ImGui::Text("%.1f%% (%d/%d)", win_rate, state.winning_trades, state.total_trades_count);
+
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn(); ImGui::Text("Profit Factor");
+        double pf = (state.gross_loss > 0) ? (state.gross_profit / state.gross_loss) : ((state.gross_profit > 0) ? 999.0 : 0.0);
+        ImGui::TableNextColumn(); ImGui::Text("%.2f", pf);
+
+        ImGui::TableNextColumn(); ImGui::Text("Total PnL");
+        double total_pnl = state.gross_profit - state.gross_loss;
+        ImGui::TableNextColumn(); ImGui::TextColored(total_pnl >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f", total_pnl);
+
+        ImGui::EndTable();
+    }
+
+    // 2. Equity Curve
+    if (state.equity_history.size() > 1) {
+        if (ImPlot::BeginPlot("##EquityCurve", ImVec2(-1, -1))) {
+            ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_NoLabel);
+            ImPlot::SetupAxis(ImAxis_Y1, "Equity");
+            
+            // Create X axis (just indices for now, or relative time)
+            std::vector<double> xs(state.equity_history.size());
+            for(size_t i=0; i<xs.size(); ++i) xs[i] = (double)i;
+
+            ImPlot::PlotLine("Equity", xs.data(), state.equity_history.data(), (int)state.equity_history.size());
+            ImPlot::EndPlot();
+        }
+    } else {
+        ImGui::TextDisabled("Not enough data for graph");
+    }
 }
 
 void RenderTerminal(TradingEngine& engine) {
@@ -347,9 +446,11 @@ void RenderTerminal(TradingEngine& engine) {
         char buf[32];
         sprintf(buf, "Open Orders (%zu)", state.open_orders.size());
         if (ImGui::BeginTabItem(buf)) {
-            if (ImGui::BeginTable("OrdersTable", 5, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+            if (ImGui::BeginTable("OrdersTable", 7, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
                 ImGui::TableSetupColumn("ID");
                 ImGui::TableSetupColumn("Side");
+                ImGui::TableSetupColumn("Type"); // Open/Close
+                ImGui::TableSetupColumn("Kind"); // Limit/Market/FOK
                 ImGui::TableSetupColumn("Price");
                 ImGui::TableSetupColumn("Amount");
                 ImGui::TableSetupColumn("Action");
@@ -361,6 +462,12 @@ void RenderTerminal(TradingEngine& engine) {
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn(); ImGui::Text("%d", o.id);
                     ImGui::TableNextColumn(); ImGui::TextColored(o.is_buy ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), o.is_buy ? "Buy" : "Sell");
+                    ImGui::TableNextColumn(); ImGui::Text(o.reduce_only ? "Reduce" : "Open");
+                    ImGui::TableNextColumn(); 
+                    if (o.order_type == 0) ImGui::Text("Limit");
+                    else if (o.order_type == 1) ImGui::Text("Market");
+                    else ImGui::Text("FOK");
+
                     ImGui::TableNextColumn(); ImGui::Text("%.2f", o.price);
                     ImGui::TableNextColumn(); ImGui::Text("%.4f", o.amount);
                     ImGui::TableNextColumn(); 
@@ -378,10 +485,11 @@ void RenderTerminal(TradingEngine& engine) {
         
         // Positions
         if (ImGui::BeginTabItem("Positions")) {
-             if (state.position.amount == 0.0) {
+             if (state.long_pos.amount == 0.0 && state.short_pos.amount == 0.0) {
                  ImGui::TextDisabled("No active positions");
              } else {
-                 if (ImGui::BeginTable("PosTable", 6, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+                 if (ImGui::BeginTable("PosTable", 7, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders)) {
+                    ImGui::TableSetupColumn("Side");
                     ImGui::TableSetupColumn("Size");
                     ImGui::TableSetupColumn("Entry Price");
                     ImGui::TableSetupColumn("Mark Price");
@@ -390,24 +498,32 @@ void RenderTerminal(TradingEngine& engine) {
                     ImGui::TableSetupColumn("Action");
                     ImGui::TableHeadersRow();
                     
-                    ImGui::TableNextRow();
-                    ImGui::TableNextColumn(); 
-                    ImGui::TextColored(state.position.amount > 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.4f", state.position.amount);
-                    ImGui::TableNextColumn(); ImGui::Text("%.2f", state.position.entry_price);
-                    ImGui::TableNextColumn(); ImGui::Text("%.2f", state.current_price);
-                    
-                    ImGui::TableNextColumn(); 
-                    ImGui::TextColored(state.position.unrealized_pnl >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f USD", state.position.unrealized_pnl);
-                    
-                    ImGui::TableNextColumn();
-                    double roe = 0.0;
-                    if (state.position.entry_price > 0) 
-                        roe = (state.position.unrealized_pnl / (std::abs(state.position.amount) * state.position.entry_price)) * 100.0;
-                    ImGui::TextColored(roe >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f%%", roe);
+                    // Render Long
+                    if (state.long_pos.amount > 0.0) {
+                        ImGui::TableNextRow();
+                        ImGui::TableNextColumn(); ImGui::TextColored(ImVec4(0,1,0,1), "LONG");
+                        ImGui::TableNextColumn(); ImGui::Text("%.4f", state.long_pos.amount);
+                        ImGui::TableNextColumn(); ImGui::Text("%.2f", state.long_pos.entry_price);
+                        ImGui::TableNextColumn(); ImGui::Text("%.2f", state.current_price);
+                        ImGui::TableNextColumn(); ImGui::TextColored(state.long_pos.unrealized_pnl >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f", state.long_pos.unrealized_pnl);
+                        ImGui::TableNextColumn(); 
+                        double roe = (state.long_pos.unrealized_pnl / (state.long_pos.amount * state.long_pos.entry_price)) * 100.0;
+                        ImGui::TextColored(roe >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f%%", roe);
+                        ImGui::TableNextColumn(); if(ImGui::Button("Close##L")) engine.ClosePosition(true, false);
+                    }
 
-                    ImGui::TableNextColumn();
-                    if (ImGui::Button("Close")) {
-                        engine.ClosePosition();
+                    // Render Short
+                    if (state.short_pos.amount < 0.0) {
+                        ImGui::TableNextRow();
+                        ImGui::TableNextColumn(); ImGui::TextColored(ImVec4(1,0,0,1), "SHORT");
+                        ImGui::TableNextColumn(); ImGui::Text("%.4f", state.short_pos.amount);
+                        ImGui::TableNextColumn(); ImGui::Text("%.2f", state.short_pos.entry_price);
+                        ImGui::TableNextColumn(); ImGui::Text("%.2f", state.current_price);
+                        ImGui::TableNextColumn(); ImGui::TextColored(state.short_pos.unrealized_pnl >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f", state.short_pos.unrealized_pnl);
+                        ImGui::TableNextColumn(); 
+                        double roe = (state.short_pos.unrealized_pnl / (std::abs(state.short_pos.amount) * state.short_pos.entry_price)) * 100.0;
+                        ImGui::TextColored(roe >= 0 ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), "%.2f%%", roe);
+                        ImGui::TableNextColumn(); if(ImGui::Button("Close##S")) engine.ClosePosition(false, true);
                     }
                     
                     ImGui::EndTable();
@@ -417,8 +533,9 @@ void RenderTerminal(TradingEngine& engine) {
         }
         
         if (ImGui::BeginTabItem("Trade History")) {
-            if (ImGui::BeginTable("HistTable", 4, ImGuiTableFlags_RowBg)) {
+            if (ImGui::BeginTable("HistTable", 5, ImGuiTableFlags_RowBg)) {
                 ImGui::TableSetupColumn("Side");
+                ImGui::TableSetupColumn("Type");
                 ImGui::TableSetupColumn("Price");
                 ImGui::TableSetupColumn("Amount");
                 ImGui::TableSetupColumn("Time"); 
@@ -426,6 +543,11 @@ void RenderTerminal(TradingEngine& engine) {
                 for (const auto& o : state.order_history) {
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn(); ImGui::TextColored(o.is_buy ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), o.is_buy ? "Buy" : "Sell");
+                    ImGui::TableNextColumn(); 
+                    if (o.order_type == 0) ImGui::Text("Limit");
+                    else if (o.order_type == 1) ImGui::Text("Market");
+                    else ImGui::Text("FOK");
+
                     ImGui::TableNextColumn(); ImGui::Text("%.2f", o.price);
                     ImGui::TableNextColumn(); ImGui::Text("%.4f", o.amount);
                     ImGui::TableNextColumn(); ImGui::Text("Just now"); 
@@ -473,6 +595,9 @@ void DashboardUI::Render(TradingEngine& engine) {
         ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.25f, &dock_right, &dock_center);
         ImGui::DockBuilderSplitNode(dock_center, ImGuiDir_Down, 0.25f, &dock_bottom, &dock_center);
         
+        ImGuiID dock_bottom_left, dock_bottom_right;
+        ImGui::DockBuilderSplitNode(dock_bottom, ImGuiDir_Right, 0.4f, &dock_bottom_right, &dock_bottom_left);
+
         ImGuiID dock_right_top, dock_right_mid, dock_right_bot;
         ImGui::DockBuilderSplitNode(dock_right, ImGuiDir_Down, 0.66f, &dock_right_mid, &dock_right_top); 
         ImGui::DockBuilderSplitNode(dock_right_mid, ImGuiDir_Down, 0.5f, &dock_right_bot, &dock_right_mid);
@@ -481,7 +606,8 @@ void DashboardUI::Render(TradingEngine& engine) {
         ImGui::DockBuilderDockWindow("Order Book", dock_right_top);
         ImGui::DockBuilderDockWindow("Recent Trades", dock_right_mid);
         ImGui::DockBuilderDockWindow("Order Entry", dock_right_bot);
-        ImGui::DockBuilderDockWindow("Terminal", dock_bottom);
+        ImGui::DockBuilderDockWindow("Terminal", dock_bottom_left);
+        ImGui::DockBuilderDockWindow("Equity", dock_bottom_right);
 
         ImGui::DockBuilderFinish(dockspace_id);
     }
@@ -509,5 +635,9 @@ void DashboardUI::Render(TradingEngine& engine) {
 
     ImGui::Begin("Terminal");
     RenderTerminal(engine);
+    ImGui::End();
+
+    ImGui::Begin("Equity");
+    RenderEquityWindow(engine);
     ImGui::End();
 }
