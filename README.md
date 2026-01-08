@@ -1,7 +1,7 @@
 # TradeUI
 
 A simple TradingSimulation in C++ using ImGUi. 
-
+This is currently work in Progress and suppoosed to become the UI "Extension" for this: https://github.com/LeonardFoerster/hft-engine.git
 
 ## Deployment
 
