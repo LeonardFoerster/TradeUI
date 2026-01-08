@@ -4,27 +4,27 @@
 #include <cmath>
 #include <iostream>
 
-TradingEngine::TradingEngine() {
-    // Constructor
-}
+TradingEngine::TradingEngine() {}
 
-void TradingEngine::Init() {
+void TradingEngine::Init()
+{
     state.rng.seed(std::random_device{}());
     
-    // Generate 200 initial candles so the chart isn't empty
-    double now = (double)std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
+    double now = (double)std::chrono::duration_cast<std::chrono::seconds>
+    (
+        std::chrono::system_clock::now().time_since_epoch()
+    ).count();
     
     double price = 42000.0;
-    std::normal_distribution<double> walk(0.0, 50.0); // Price volatility
-    std::uniform_real_distribution<double> noise(0.0, 15.0); // High/Low noise
-    std::uniform_real_distribution<double> vol(1.0, 100.0); // Volume
+    std::normal_distribution<double> walk(0.0, 50.0);
+    std::uniform_real_distribution<double> noise(0.0, 15.0);
+    std::uniform_real_distribution<double> vol(1.0, 100.0);
 
-    // Go back 200 minutes (assuming 1m candles for base sim)
     double time_step = 60.0;
     double start_time = now - (200 * time_step);
 
-    for (int i = 0; i < 200; ++i) {
+    for (int i = 0; i < 200; ++i)
+    {
         double t = start_time + (i * time_step);
         double move = walk(state.rng);
         double open = price;
@@ -38,15 +38,14 @@ void TradingEngine::Init() {
     state.current_price = price;
     state.order_price = (float)price;
     
-    // Init Equity History
     state.equity_history.push_back(state.equity);
 }
 
-std::vector<Candle> TradingEngine::GetCandles(int timeframe_idx) const {
-    // Map idx to minutes
-    // 0=1m, 1=5m, 2=15m, 3=1h, 4=4h, 5=D
+std::vector<Candle> TradingEngine::GetCandles(int timeframe_idx) const
+{
     int minutes = 1;
-    switch(timeframe_idx) {
+    switch(timeframe_idx)
+        {
         case 0: minutes = 1; break;
         case 1: minutes = 5; break;
         case 2: minutes = 15; break;
@@ -56,7 +55,8 @@ std::vector<Candle> TradingEngine::GetCandles(int timeframe_idx) const {
         default: minutes = 1; break;
     }
 
-    if (minutes == 1 || state.candles.empty()) {
+    if (minutes == 1 || state.candles.empty())
+        {
         return state.candles;
     }
 
@@ -67,28 +67,27 @@ std::vector<Candle> TradingEngine::GetCandles(int timeframe_idx) const {
     bool first = true;
     double bucket_start_time = 0.0;
 
-    for (const auto& c : state.candles) {
-        // Calculate which bucket this timestamp belongs to
-        // We use floor to align to 00:00, 00:15 etc.
+    for (const auto& c : state.candles)
+    {
         double t = c.time;
         double bucket = std::floor(t / group_seconds) * group_seconds;
 
-        if (first) {
+        if (first)
+        {
             bucket_start_time = bucket;
             current_candle = c;
-            current_candle.time = bucket; // Force align time
+            current_candle.time = bucket;
             first = false;
-        } else {
-            if (bucket != bucket_start_time) {
-                // Push finished candle
+        } else
+        {
+            if (bucket != bucket_start_time)
+            {
                 aggregated.push_back(current_candle);
-                
-                // Start new candle
                 bucket_start_time = bucket;
                 current_candle = c;
                 current_candle.time = bucket;
-            } else {
-                // Update current candle
+            } else
+            {
                 current_candle.high = std::max(current_candle.high, c.high);
                 current_candle.low = std::min(current_candle.low, c.low);
                 current_candle.close = c.close;
@@ -96,68 +95,74 @@ std::vector<Candle> TradingEngine::GetCandles(int timeframe_idx) const {
             }
         }
     }
-    // Push last partial candle
-    if (!first) {
+
+    if (!first)
+    {
         aggregated.push_back(current_candle);
     }
 
     return aggregated;
 }
 
-void TradingEngine::UpdateAccount() {
-    // Long PnL
-    if (state.long_pos.amount > 0.0) {
+void TradingEngine::UpdateAccount()
+{
+    if (state.long_pos.amount > 0.0)
+    {
         state.long_pos.unrealized_pnl = (state.current_price - state.long_pos.entry_price) * state.long_pos.amount;
-    } else {
+    } else
+    {
         state.long_pos.unrealized_pnl = 0.0;
     }
 
-    // Short PnL (amount is negative)
-    if (state.short_pos.amount < 0.0) {
+    if (state.short_pos.amount < 0.0)
+    {
         state.short_pos.unrealized_pnl = (state.current_price - state.short_pos.entry_price) * state.short_pos.amount;
-    } else {
+    } else
+    {
         state.short_pos.unrealized_pnl = 0.0;
     }
 
     state.equity = state.balance + state.long_pos.unrealized_pnl + state.short_pos.unrealized_pnl;
 
-    // Performance Stats (Drawdown)
     if (state.equity > state.max_equity) state.max_equity = state.equity;
-    if (state.max_equity > 0) {
+    if (state.max_equity > 0)
+    {
         double dd = (state.max_equity - state.equity) / state.max_equity * 100.0;
         if (dd > state.max_drawdown) state.max_drawdown = dd;
     }
     
-    // History Recording (Limit size)
     state.equity_history.push_back(state.equity);
-    if (state.equity_history.size() > 5000) {
+    if (state.equity_history.size() > 5000)
+    {
         state.equity_history.erase(state.equity_history.begin());
     }
 }
 
-void TradingEngine::ExecuteFill(bool is_buy, double price, double amount, bool reduce_only, int order_type) {
-    // Hedge Mode Logic
+void TradingEngine::ExecuteFill(bool is_buy, double price, double amount, bool reduce_only, int order_type)
+{
     PositionInfo* target_pos = nullptr;
     double qty = 0.0;
     bool is_opening = !reduce_only;
 
-    if (is_buy) {
-        if (!reduce_only) {
-            // Open Long
+    if (is_buy)
+    {
+        if (!reduce_only)
+        {
             target_pos = &state.long_pos;
             qty = amount;
-        } else {
-            // Close Short (Buy to Cover)
+        } else
+        {
             target_pos = &state.short_pos;
             qty = amount; 
         }
-    } else {
-        if (!reduce_only) {
-            // Open Short
+    } else
+    {
+        if (!reduce_only)
+        {
             target_pos = &state.short_pos;
             qty = -amount;
-        } else {
-            // Close Long (Sell)
+        } else
+        {
             target_pos = &state.long_pos;
             qty = -amount; 
         }
@@ -165,60 +170,66 @@ void TradingEngine::ExecuteFill(bool is_buy, double price, double amount, bool r
 
     if (!target_pos) return;
 
-    if (is_opening) {
-        // Adding to position (Weighted Average Entry)
+    if (is_opening)
+    {
         double old_val = std::abs(target_pos->amount) * target_pos->entry_price;
         double new_val = std::abs(qty) * price;
         double new_amt = std::abs(target_pos->amount) + std::abs(qty);
         
-        if (new_amt > 0) {
+        if (new_amt > 0)
+        {
             target_pos->entry_price = (old_val + new_val) / new_amt;
-        } else {
+        } else
+        {
             target_pos->entry_price = price;
         }
         target_pos->amount += qty;
 
-    } else {
-        // Closing position (Realize PnL)
+    } else
+    {
         double current_amt = target_pos->amount;
         double close_qty = qty;
 
-        // Cap logic
-        if (is_buy) { 
-             if ((current_amt + close_qty) > 0.0) close_qty = -current_amt; // Cap at 0
-        } else {
+        if (is_buy)
+        {
+             if ((current_amt + close_qty) > 0.0) close_qty = -current_amt;
+        } else
+        {
              if ((current_amt + close_qty) < 0.0) close_qty = -current_amt;
         }
 
         double realized = 0.0;
-        if (target_pos == &state.long_pos) {
+        if (target_pos == &state.long_pos)
+        {
             realized = (price - target_pos->entry_price) * std::abs(close_qty);
-        } else {
+        } else
+        {
             realized = (target_pos->entry_price - price) * std::abs(close_qty);
         }
         
         state.balance += realized;
         target_pos->amount += close_qty;
 
-        // Track Trade Stats
-        if (std::abs(close_qty) > 0.000001) {
+        if (std::abs(close_qty) > 0.000001)
+        {
              state.total_trades_count++;
-             if (realized > 0) {
+             if (realized > 0)
+             {
                  state.winning_trades++;
                  state.gross_profit += realized;
-             } else {
-                 state.gross_loss += std::abs(realized);
+             } else
+             {
+                state.gross_loss += std::abs(realized);
              }
         }
     }
     
-    // Cleanup tiny residuals
-    if (std::abs(target_pos->amount) < 0.000001) {
+    if (std::abs(target_pos->amount) < 0.000001)
+    {
         target_pos->amount = 0;
         target_pos->entry_price = 0;
     }
 
-    // Add to History
     double current_time = state.candles.empty() ? 0.0 : state.candles.back().time;
     state.order_history.insert(state.order_history.begin(), {0, is_buy, price, amount, order_type, current_time, reduce_only});
     if (state.order_history.size() > 50) state.order_history.pop_back();
@@ -226,25 +237,32 @@ void TradingEngine::ExecuteFill(bool is_buy, double price, double amount, bool r
     UpdateAccount();
 }
 
-void TradingEngine::PlaceOrder(bool is_buy, int order_type, double price, double amount, bool reduce_only) {
-    if (order_type == ORDER_MARKET) {
+void TradingEngine::PlaceOrder(bool is_buy, int order_type, double price, double amount, bool reduce_only)
+{
+    if (order_type == ORDER_MARKET)
+    {
         double fill_p = is_buy ? state.asks[0].price : state.bids[0].price;
         ExecuteFill(is_buy, fill_p, amount, reduce_only, ORDER_MARKET);
     } 
-    else if (order_type == ORDER_LIMIT) {
+    else if (order_type == ORDER_LIMIT)
+    {
         double current_time = state.candles.empty() ? 0.0 : state.candles.back().time;
         state.open_orders.push_back({state.order_id_counter++, is_buy, price, amount, ORDER_LIMIT, current_time, reduce_only});
     }
-    else if (order_type == ORDER_FOK) {
+    else if (order_type == ORDER_FOK)
+    {
         auto& book = is_buy ? state.asks : state.bids;
         double filled_vol = 0.0;
         double weighted_price_sum = 0.0;
         bool possible = false;
         
-        for (const auto& level : book) {
-            if (is_buy) {
+        for (const auto& level : book)
+        {
+            if (is_buy)
+            {
                 if (level.price > price) break; 
-            } else {
+            } else
+            {
                 if (level.price < price) break; 
             }
             
@@ -252,52 +270,65 @@ void TradingEngine::PlaceOrder(bool is_buy, int order_type, double price, double
             weighted_price_sum += take * level.price;
             filled_vol += take;
             
-            if (filled_vol >= amount - 0.000001) {
+            if (filled_vol >= amount - 0.000001)
+            {
                 possible = true;
                 break;
             }
         }
         
-        if (possible) {
+        if (possible)
+        {
             double avg_price = weighted_price_sum / amount;
             ExecuteFill(is_buy, avg_price, amount, reduce_only, ORDER_FOK);
-        } else {
+        } else
+        {
             std::cout << "FOK Order Killed" << std::endl;
         }
     }
 }
 
-void TradingEngine::CancelOrder(int index) {
-    if (index >= 0 && index < (int)state.open_orders.size()) {
+void TradingEngine::CancelOrder(int index)
+{
+    if (index >= 0 && index < (int)state.open_orders.size())
+    {
         state.open_orders.erase(state.open_orders.begin() + index);
     }
 }
 
-void TradingEngine::ClosePosition(bool close_long, bool close_short) {
-    if (close_long && state.long_pos.amount > 0.0) {
+void TradingEngine::ClosePosition(bool close_long, bool close_short)
+{
+    if (close_long && state.long_pos.amount > 0.0)
+    {
         PlaceOrder(false, ORDER_MARKET, 0, state.long_pos.amount, true); 
     }
-    if (close_short && state.short_pos.amount < 0.0) {
+    if (close_short && state.short_pos.amount < 0.0)
+    {
         PlaceOrder(true, ORDER_MARKET, 0, std::abs(state.short_pos.amount), true); 
     }
 }
 
-void TradingEngine::CheckLimitOrders() {
-    for (auto it = state.open_orders.begin(); it != state.open_orders.end();) {
+void TradingEngine::CheckLimitOrders()
+{
+    for (auto it = state.open_orders.begin(); it != state.open_orders.end();)
+    {
         bool hit = false;
         if (it->is_buy && state.current_price <= it->price) hit = true;
         else if (!it->is_buy && state.current_price >= it->price) hit = true;
         
-        if (hit) {
+        if (hit)
+        {
             ExecuteFill(it->is_buy, it->price, it->amount, it->reduce_only, ORDER_LIMIT);
             it = state.open_orders.erase(it);
-        } else {
+        } else
+        {
             ++it;
         }
     }
 }
 
-void TradingEngine::GenerateMarketData() {
+void TradingEngine::GenerateMarketData()
+{
     std::normal_distribution<double> walk(0.0, 30.0);
     std::uniform_real_distribution<double> noise(0.0, 10.0);
     std::uniform_real_distribution<double> vol_dist(0.5, 10.0);
@@ -319,19 +350,25 @@ void TradingEngine::GenerateMarketData() {
     state.asks.clear();
     
     double p = state.current_price;
-    for(int i=0; i<15; ++i) {
+
+    for(int i=0; i<15; ++i)
+    {
         p -= std::uniform_real_distribution<double>(1.0, 5.0)(state.rng);
         state.bids.push_back({p, std::uniform_real_distribution<double>(0.1, 5.0)(state.rng), true});
     }
     p = state.current_price;
-    for(int i=0; i<15; ++i) {
+
+    for(int i=0; i<15; ++i)
+    {
         p += std::uniform_real_distribution<double>(1.0, 5.0)(state.rng);
         state.asks.push_back({p, std::uniform_real_distribution<double>(0.1, 5.0)(state.rng), false});
     }
 
-    if (std::uniform_real_distribution<double>(0.0, 1.0)(state.rng) > 0.3) {
+    if (std::uniform_real_distribution<double>(0.0, 1.0)(state.rng) > 0.3)
+    {
         bool is_buy = std::uniform_int_distribution<int>(0, 1)(state.rng);
-        state.trade_history.insert(state.trade_history.begin(), {
+        state.trade_history.insert(state.trade_history.begin(),
+    {
             new_time, 
             state.current_price + (is_buy ? 1.0 : -1.0), 
             std::uniform_real_distribution<double>(0.01, 2.0)(state.rng), 
@@ -341,7 +378,8 @@ void TradingEngine::GenerateMarketData() {
     }
 }
 
-void TradingEngine::Update(double dt) {
+void TradingEngine::Update(double dt)
+{
     if (state.is_paused) return;
 
     static double accumulator = 0.0;

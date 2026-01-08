@@ -1,7 +1,8 @@
 #pragma once
 #include "core/TradingEngine.h"
 
-namespace DashboardUI {
+namespace DashboardUI
+{
     void SetupStyle();
     void Render(TradingEngine& engine);
 }

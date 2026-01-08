@@ -37,13 +37,13 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    // Initialize Engine
     TradingEngine engine;
     engine.Init();
 
     double last_time = glfwGetTime();
 
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         double now = glfwGetTime();
         double dt = now - last_time;
         last_time = now;
