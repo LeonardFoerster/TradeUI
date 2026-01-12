@@ -306,6 +306,7 @@ void TradingEngine::ClosePosition(bool close_long, bool close_short)
     {
         PlaceOrder(true, ORDER_MARKET, 0, std::abs(state.short_pos.amount), true); 
     }
+    TradingEngine::UpdateAccount();
 }
 
 void TradingEngine::CheckLimitOrders()
