@@ -10,8 +10,7 @@ To deploy this project run
 ```bash
   git clone https://github.com/LeonardFoerster/TradeUI
   cd TradeUI
-  mkdir build
-  cd build
+  mkdir build && cd build
   cmake ..
   cmake --build .
   ./TradingDashboard
