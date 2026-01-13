@@ -30,28 +30,28 @@ include_directories(
 
 # 3. Source Files
 set(IMGUI_SOURCES
-    libs/imgui/imgui.cpp
-    libs/imgui/imgui_demo.cpp
-    libs/imgui/imgui_draw.cpp
-    libs/imgui/imgui_tables.cpp
-    libs/imgui/imgui_widgets.cpp
-    libs/imgui/backends/imgui_impl_glfw.cpp
-    libs/imgui/backends/imgui_impl_opengl3.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_demo.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_draw.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_tables.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_widgets.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/backends/imgui_impl_glfw.cpp
+    ${CMAKE_SOURCE_DIR}/libs/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 set(IMPLOT_SOURCES
-    libs/implot/implot.cpp
-    libs/implot/implot_items.cpp
-    libs/implot/implot_demo.cpp
+    ${CMAKE_SOURCE_DIR}/libs/implot/implot.cpp
+    ${CMAKE_SOURCE_DIR}/libs/implot/implot_items.cpp
+    ${CMAKE_SOURCE_DIR}/libs/implot/implot_demo.cpp
 )
 
 set(GLAD_SOURCES
-    libs/glad/src/glad.c
+    ${CMAKE_SOURCE_DIR}/libs/glad/src/glad.c
 )
 
 set(APP_SOURCES
-    src/core/TradingEngine.cpp
-    src/ui/DashboardUI.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/TradingEngine.cpp
+    ${CMAKE_SOURCE_DIR}/src/ui/DashboardUI.cpp
 )
 
 # 4. Executable
