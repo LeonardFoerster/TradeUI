@@ -29,29 +29,34 @@ include_directories(
 )
 
 # 3. Source Files
+set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui")
+if(NOT EXISTS "${IMGUI_DIR}/imgui.cpp")
+    message(FATAL_ERROR "imgui.cpp not found at ${IMGUI_DIR}/imgui.cpp. Please check your source tree.")
+endif()
+
 set(IMGUI_SOURCES
-    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_demo.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_draw.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_tables.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_widgets.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/backends/imgui_impl_glfw.cpp
-    ${CMAKE_SOURCE_DIR}/libs/imgui/backends/imgui_impl_opengl3.cpp
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 set(IMPLOT_SOURCES
-    ${CMAKE_SOURCE_DIR}/libs/implot/implot.cpp
-    ${CMAKE_SOURCE_DIR}/libs/implot/implot_items.cpp
-    ${CMAKE_SOURCE_DIR}/libs/implot/implot_demo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/implot/implot.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/implot/implot_items.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/implot/implot_demo.cpp
 )
 
 set(GLAD_SOURCES
-    ${CMAKE_SOURCE_DIR}/libs/glad/src/glad.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/glad/src/glad.c
 )
 
 set(APP_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/core/TradingEngine.cpp
-    ${CMAKE_SOURCE_DIR}/src/ui/DashboardUI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/TradingEngine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui/DashboardUI.cpp
 )
 
 # 4. Executable
