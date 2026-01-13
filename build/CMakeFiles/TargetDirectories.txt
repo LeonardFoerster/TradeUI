@@ -1,3 +1,0 @@
-/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles/TradingDashboard.dir
-/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles/edit_cache.dir
-/home/leonard/w/projects/cpp/dashboard/build/CMakeFiles/rebuild_cache.dir
